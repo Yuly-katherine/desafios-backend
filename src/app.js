@@ -26,21 +26,18 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 
 
-// Configuración Websocket
-const httpServer = app.listen(8080, ()=>{
-    console.log("Server listening on port 80080");
- });
-const io = new Server(httpServer);
-//hands shake
-io.on('connection', socket => {
-    console.log("Nuevo cliente conectado")
 
-    socket.on('message', data => {
-    console.log(data)
-    })
+
+// Configuración Websocket
+const httpServer = app.listen(8080, () =>{
+    console.log("listening on port 8080");
+});
+const io = new Server(httpServer);
+
+io.on("connection", (socket)=>{
+    console.log("New client connected.")
+    socket.on('productList', data => {
+    io.emit('updatedProducts', data)
 })
 
-// app.use((req,res,next)=>{
-//     req.socketServer = socketServer
-//     next()
-// })
+})

@@ -1,24 +1,19 @@
-import express from 'express';
+import { Router } from "express";
+import ProductManager from '../manager/ProductManager.js';
 
-const router = express.Router();
 
-router.get('/', (req, res)=>{
-    let testUser = {
-        name: "Yuly"
-    }
-    res.render('home',{
-        user:testUser,
-        style: 'index.css',
-    })
+const manager = new ProductManager('./data/products.json');
+const viewsRouter = Router()
+
+viewsRouter.get("/", async (req,res)=>{
+    const products = await manager.getProducts()
+    res.render("home", {products})
 })
 
-router.get('/', (req, res)=>{
-    let testUser = {
-        name: "Yuly"
-    }
-    res.render('realTimeProducts',{
-        user:testUser,
-        style: 'index.css',
-    })
+viewsRouter.get("/realTimeProducts", async (req,res)=>{
+    const products = await manager.getProducts()
+    res.render("realTimeProducts" , {products})            
+    
 })
-export default router;
+
+export default viewsRouter

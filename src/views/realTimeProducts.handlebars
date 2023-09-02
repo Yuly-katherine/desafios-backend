@@ -1,0 +1,93 @@
+<div>
+  <div class="products-view">
+    <div>
+      <h3>!Bienvenido!</h3>
+
+    </div>
+    <h2>Agregar producto</h2>
+    <form  id="createForm">
+
+        <div class="products-view__form">
+        <label class="products-view__form-label" for="title">title</label>
+        <input
+          class="products-view__form-input"
+          type="text"
+          name="title"
+          id="title"
+        />
+      </div>
+      <div class="products-view__form">
+        <label
+          class="products-view__form-label"
+          for="description"
+        >description</label>
+        <input
+          class="products-view__form-input"
+          type="text"
+          name="description"
+          id="description"
+        />
+      </div>
+      <div class="products-view__form">
+        <label class="products-view__form-label" for="price">price</label>
+        <input
+          class="products-view__form-input"
+          type="number"
+          name="price"
+          id="price"
+        />
+      </div>
+      <div class="products-view__form">
+        <label class="products-view__form-label" for="code">code</label>
+        <input
+          class="products-view__form-input"
+          type="text"
+          name="code"
+          id="code"
+        />
+      </div>
+      <div class="products-view__form">
+        <label class="products-view__form-label" for="stock">stock</label>
+        <input
+          class="products-view__form-input"
+          type="number"
+          name="stock"
+          id="stock"
+        />
+      </div>
+      <div class="products-view__form">
+        <label class="products-view__form-label" for="category">category</label>
+        <input
+          class="products-view__form-input"
+          type="text"
+          name="category"
+          id="category"
+        />
+      </div>
+      <br />
+      <button type="submit" id="addNewProductBtn" class="btn btn-info add-product">Agregar</button>
+    </form>
+  </div>
+  <h1>Productos Actualizados:</h1>
+    <div>
+    <ul id="container">
+        {{#each products}}
+            <li>
+                <p><b>{{title}}</b></p>
+                <p>Id: {{id}}</p>
+                <p>Price: ${{price}}</p>
+                <p>Code: {{code}}</p>
+                <p>Description: {{description}}</p>
+                <p>Stock: {{stock}}</p>
+                <p>Category: {{category}}</p>
+            </li>
+             <button class="btn btn-danger add-product" 
+             onclick="deleteProduct({{id}})">Eliminar</button>
+            <br />
+            {{/each}}
+    </ul>
+</div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
