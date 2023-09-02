@@ -12,7 +12,7 @@ router.get('/', async(req, res) => {
     if(limit) {
         res.status(201).send({result: "success", payload: products.slice(0, limit)})
        }else{
-        res.status(201).send(products);
+        res.status(201).send({result: "success", payload: products});
        }
     
 })
@@ -35,8 +35,18 @@ router.post('/', async(req, res) => {
     const  {title, description, price, code, stock, category} = req.body;
     const newProductProperties = {title, description, price, code, stock, category}
 
-    if (Object.values(newProductProperties).includes(undefined)) {
+    console.log(newProductProperties, "nuevo produto")
+
+    const products = await productsManager.getProducts();
+        const product = products.find((element) => {
+        return element.code === newProductProperties.code
+    })
+    if (Object.values(newProductProperties).includes(undefined || '')) {
         return res.status(400).send({error: "No se han ingresado todos los datos"})
+    } 
+
+    if (product) {
+        return res.status(400).send({error: `El code: ${newProductProperties.code} se encuentra repetido`})
     } 
 
     const result = await productsManager.addProduct(newProductProperties);

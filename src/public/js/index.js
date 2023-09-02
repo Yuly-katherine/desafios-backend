@@ -1,4 +1,6 @@
 const socket = io()
+
+
 const container = document.getElementById("container")
 
 document.getElementById('addNewProductBtn').addEventListener('click', (event)=> {
@@ -22,9 +24,10 @@ document.getElementById('addNewProductBtn').addEventListener('click', (event)=> 
     .then((result) => result.json())
     .then((result) => {
     if (result.error) {
-        alert("El producto no se ha agregado, ingresa todos los datos");
+        alert(result.error);
     } else {
       alert("El producto se ha agregado con éxito!");
+      console.log(result, "soy el resultado");
       socket.emit("productList", result.payload);
       document.getElementById("title").value = "";
       document.getElementById("description").value = "";
@@ -43,7 +46,7 @@ deleteProduct = async (id)=>{
       .then((result) => result.json())
       .then((result) => {
         if (result.error) {
-            alert("El producto no se ha eliminado");
+            alert(result.error);
         }else {
             alert("producto eliminado!");
             socket.emit("productList", result.payload);

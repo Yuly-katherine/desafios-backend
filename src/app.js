@@ -21,23 +21,23 @@ app.use(express.static(__dirname + "/public"));
 
 
 //Routers
+
 app.use('/', viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
-
-
 
 
 // Configuración Websocket
 const httpServer = app.listen(8080, () =>{
     console.log("listening on port 8080");
 });
-const io = new Server(httpServer);
+const socketServer = new Server(httpServer);
 
-io.on("connection", (socket)=>{
+socketServer.on("connection", (socket)=>{
     console.log("New client connected.")
-    socket.on('productList', data => {
-    io.emit('updatedProducts', data)
-})
+
+    socket.on('productList', (data) => {
+        socketServer.emit('updatedProducts', data)
+    })
 
 })
