@@ -26,7 +26,6 @@ document.getElementById('addNewProductBtn').addEventListener('click', (event)=> 
     if (result.error) {
         alert(result.error);
     } else {
-      alert("El producto se ha agregado con éxito!");
       console.log(result, "soy el resultado");
       socket.emit("productList", result.payload);
       document.getElementById("title").value = "";
@@ -35,6 +34,7 @@ document.getElementById('addNewProductBtn').addEventListener('click', (event)=> 
       document.getElementById("code").value = "";
       document.getElementById("stock").value = "";
       document.getElementById("category").value = "";
+      alert("El producto se ha agregado con éxito!");
     }
     }).catch((err) => alert(`ocurrió un error: (\n ${err}`));
 })
@@ -48,8 +48,8 @@ deleteProduct = async (id)=>{
         if (result.error) {
             alert(result.error);
         }else {
-            alert("producto eliminado!");
             socket.emit("productList", result.payload);
+            alert("producto eliminado!");
         }
       })
       .catch((err) => alert(`error! (\n ${err}`));
