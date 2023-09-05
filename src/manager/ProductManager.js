@@ -81,6 +81,7 @@ class ProductManager {
     }
 
     async deleteProduct( productId ) {
+        console.log(productId, "productId")
         let products = await this.getProducts()
         const index = products.findIndex((element) => {
             return element.id === productId

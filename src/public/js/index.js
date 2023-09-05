@@ -26,7 +26,6 @@ document.getElementById('addNewProductBtn').addEventListener('click', (event)=> 
     if (result.error) {
         alert(result.error);
     } else {
-      console.log(result, "soy el resultado");
       socket.emit("productList", result.payload);
       document.getElementById("title").value = "";
       document.getElementById("description").value = "";

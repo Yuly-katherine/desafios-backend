@@ -35,8 +35,6 @@ router.post('/', async(req, res) => {
     const  {title, description, price, code, stock, category} = req.body;
     const newProductProperties = {title, description, price, code, stock, category}
 
-    console.log(newProductProperties, "nuevo produto")
-
     const products = await productsManager.getProducts();
         const product = products.find((element) => {
         return element.code === newProductProperties.code
@@ -76,7 +74,6 @@ router.put('/:pid', async(req, res) => {
 // delete  a product
 router.delete('/:pid', async(req, res) => {   
     const productId = parseInt(req.params.pid);
-
     if (!productId) {
         return res.status(400).send({error: `el ID: ${productId} no existe`});
     }
