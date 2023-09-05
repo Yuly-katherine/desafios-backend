@@ -62,7 +62,7 @@ deleteProduct = async (id)=>{
         container.innerHTML += `
                                         <li>
                                             <p><b>${product.title}</b></p>
-                                            <p>${product.id}</p>
+                                            <p>Id:${product.id}</p>
                                             <p>Precio: $ ${product.price}</p>
                                             <p>Code:${product.code}</p>
                                             <p>Descripción: ${product.description}</p>

@@ -6,12 +6,12 @@ class ProductManager {
         this.path = path;
     }
 
-     async addProduct (newProductProperties) {
+     addProduct (newProductProperties) {
 
-        const products = await this.getProducts();
+        const products = this.getProducts();
         
         const nuevoProducto = {
-            id : await this.updateId(products),
+            id : this.updateId(products),
             title: newProductProperties.title,
             description: newProductProperties.description,
             price: newProductProperties.price,
@@ -21,31 +21,31 @@ class ProductManager {
             status: true
         }
         const updateProducts = [...products, nuevoProducto];
-            await fs.promises.writeFile(this.path, JSON.stringify(updateProducts));
+            fs.promises.writeFile(this.path, JSON.stringify(updateProducts));
             return updateProducts
     }
 
-    async getProducts () {
+    getProducts () {
         try {
-            const products = await fs.promises.readFile(this.path, "utf-8");
+            const products = fs.promises.readFile(this.path, "utf-8");
             return JSON.parse(products); 
         }catch(error) {
             return [];
         }
     }
 
-    async updateId(products) {
+    updateId(products) {
         if(products.length > 0) {
             const ids = products.map( prods => prods.id);
             let maxIds = Math.max(...ids);
             return maxIds + 1
         } else {
-            return 0
+            return 1
         }
     }
     
-    async getProductById( productId ) {
-        const products = await this.getProducts();
+    getProductById( productId ) {
+        const products = this.getProducts();
         const product = products.find((item) => {
             return item.id === productId;
         });
@@ -56,8 +56,8 @@ class ProductManager {
         }
     }
 
-    async updateProduct( productId, productProperties ) {
-        let products = await this.getProducts()
+    updateProduct( productId, productProperties ) {
+        let products = this.getProducts()
         const index = products.findIndex((element) => {
             return element.id === productId
         })
@@ -75,14 +75,13 @@ class ProductManager {
                 status: true
             }
             products[index] = actualizarProducto;
-            await fs.promises.writeFile(this.path, JSON.stringify(products));
+            fs.promises.writeFile(this.path, JSON.stringify(products));
             return products
         }
     }
 
-    async deleteProduct( productId ) {
-        console.log(productId, "productId")
-        let products = await this.getProducts()
+    deleteProduct( productId ) {
+        let products = this.getProducts()
         const index = products.findIndex((element) => {
             return element.id === productId
         })
@@ -90,7 +89,7 @@ class ProductManager {
             return console.error(`El producto con el ID ${productId} no existe`);
         } else {
             products.splice(index, 1);
-            await fs.promises.writeFile(this.path, JSON.stringify(products));
+            fs.promises.writeFile(this.path, JSON.stringify(products));
             return products
         }
     }
