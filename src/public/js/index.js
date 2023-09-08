@@ -58,20 +58,22 @@ deleteProduct = async (id)=>{
   
   socket.on("updatedProducts", (data)=>{
     container.innerHTML = ""
-    data.forEach( product => {
-        container.innerHTML += `
-                                        <li>
-                                            <p><b>${product.title}</b></p>
-                                            <p>Id:${product.id}</p>
-                                            <p>Precio: $ ${product.price}</p>
-                                            <p>Code:${product.code}</p>
-                                            <p>Descripción: ${product.description}</p>
-                                            <p>Stock: ${product.stock}</p>
-                                            <p>Categoría: ${product.category}</p>
-                                        </li>
-                                        <button class="btn btn-danger add-product" 
-                                        onclick="deleteProduct({${product.id}})">Eliminar</button>
-                                        `
-    }) 
+    if (data){
+        data.forEach( product => {
+            container.innerHTML += `
+                                            <li>
+                                                <p><b>${product.title}</b></p>
+                                                <p>Id:${product.id}</p>
+                                                <p>Precio: $ ${product.price}</p>
+                                                <p>Code:${product.code}</p>
+                                                <p>Descripción: ${product.description}</p>
+                                                <p>Stock: ${product.stock}</p>
+                                                <p>Categoría: ${product.category}</p>
+                                            </li>
+                                            <button class="btn btn-danger add-product" 
+                                            onclick='deleteProduct(${product.id})'>Eliminar</button>
+                                            `
+        }) 
+    }
 })
   
