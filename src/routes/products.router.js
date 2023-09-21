@@ -97,7 +97,7 @@ router.put("/:pid", async (req, res) => {
 
 // delete  a product
 router.delete("/:pid", async (req, res) => {
-  const productId = parseInt(req.params.pid);
+  const productId = req.params.pid;
   if (!productId) {
     return res.status(400).send({ error: `el ID: ${productId} no existe` });
   }

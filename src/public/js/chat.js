@@ -20,6 +20,8 @@ Swal.fire({
         const inputMessage = chatInput.value
        if(inputMessage.trim().length > 0){
         socket.emit("chat-message", {username, message: inputMessage})
+
+        chatInput.value = "";
         }    
     }
   })

@@ -38,20 +38,22 @@ const httpServer= app.listen(8080, () => {
 
 // Websocket
 const io = new Server(httpServer);
+const messages = [];
 
 io.on("connection", (socket)=>{
     console.log("New client connected.")
 
-    io.on("new-user", (username) => {
-        io.emit("messages", messages);
-        io.broadcast.emit("new-user", username);
-    })
     socket.on("chat-message", (data)=>{
         messages.push(data);
         io.emit("messages", messages)
     })
+
+    socket.on("new-user", (username) => {
+        socket.emit("messages", messages);
+        socket.broadcast.emit("new-user", username);
+    })
     socket.on('productList', (data) => {
-        socketServer.emit('updatedProducts', data)
+        io.emit('updatedProducts', data)
     })
 
 })
