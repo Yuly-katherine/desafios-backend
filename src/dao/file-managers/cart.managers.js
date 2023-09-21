@@ -1,9 +1,12 @@
 import fs from "fs";
+import __dirname from "../../utils.js";
+
+const path = __dirname + "/dao/file-managers/files/carts.json";
 
 class CartManager {
 
-  constructor(path) {
-    this.path = path;
+  constructor() {
+    console.log("Working with users using filesystem");
   }
 
   async getCartById(cartId) {
@@ -12,23 +15,20 @@ class CartManager {
       return item.id === cartId;
     });
     if (!cart) {
-      console.error(`El carrito con el ID: ${cartId} no existe`);
-      return {}
+      throw new Error(`El carrito con el ID: ${cartId} no existe`);
     } else {
       return cart;
     }
   }
 
   async getAllCarts() {
-    try {
-      const allCarts = await fs.promises.readFile(this.path, "utf-8");
+    if (fs.existsSync(path)) {
+      const allCarts = await fs.promises.readFile(path, "utf-8");
       return JSON.parse(allCarts);
-    } catch (error) {
-      return [];
     }
-  }
-
-
+    return [];
+  };
+  
   async addCart() {
     const carts = await this.getAllCarts();
 
@@ -37,7 +37,7 @@ class CartManager {
       id: await this.updateCartId(carts),
     };
     const updateCarts = [...carts, newCart];
-    await fs.promises.writeFile(this.path, JSON.stringify(updateCarts));
+    await fs.promises.writeFile(path, JSON.stringify(updateCarts));
     return updateCarts;
   }
 
@@ -75,7 +75,7 @@ class CartManager {
 
     allCarts[index] = cartById
 
-    await fs.promises.writeFile(this.path, JSON.stringify(allCarts))
+    await fs.promises.writeFile(path, JSON.stringify(allCarts))
     return cartById;
 
   }
