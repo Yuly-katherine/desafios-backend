@@ -15,7 +15,7 @@ class CartManager {
 
   // get cart by id  
   async getCartById(cartId) {
-    const cartById = await cartModel.findById(cartId).populate('products.product').lean();
+    const cartById = await cartModel.find({_id:`${cartId}`}).populate('products.product').lean();
     if (!cartById) {      
       console.error(`El carrito con el ID: ${cartId} no existe`);
       return {}
