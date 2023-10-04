@@ -1,0 +1,47 @@
+<div>
+  <div class="products-view">
+    <h1>!Welcome!</h1>
+  </div>
+  <h3>Products</h3>
+  {{newCart}}
+  <div>
+    <table class="table table-striped table-bordered table align-middle">
+    <thead>
+      <tr>
+        <th>title</th>
+        <th>$price</th>
+        <th>description</th>
+        <th>category</th>
+        <th>stock</th>
+        <th>Add to cart</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each products.docs}}
+        <tr>
+          <td>{{this.title}}</td>
+          <td>${{this.price}}</td>
+          <td>{{this.description}}</td>
+          <td>{{this.category}}</td>
+          <td>{{this.stock}}</td>
+          <td><button class="btn btn-success add-product" 
+            onclick= "addProduct('{{this._id}}')">Add</button></td>
+
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  </div>
+  <div>
+    {{#if products.hasPrevPage}}
+      <a href="/products?page={{products.prevPage}}">previous</a>
+    {{/if}}
+
+    <span><b> Pages {{products.page}} de {{products.totalPages}}</span></b>
+
+    {{#if products.hasNextPage}}
+      <a href="/products?page={{products.nextPage}}">Next</a>
+    {{/if}}
+  </div>
+</div>
+<script src="/js/addProductsToCart.js"></script>

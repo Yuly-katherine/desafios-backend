@@ -18,6 +18,7 @@ if(config.presistenceType === "db"){
 }else if(config.presistenceType === "file"){
     ProductsManager = FileProductsManager;
     CartManager = FileCartManager;
+    ChatManager = DbChatManager;
 }else{
     console.log("Unknown persistence type")
 }

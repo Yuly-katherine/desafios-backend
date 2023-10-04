@@ -29,10 +29,8 @@ class ProductManager {
   async getProducts() {
     if (fs.existsSync(path)) {
       const products = await fs.promises.readFile(path, "utf-8");
-
       return JSON.parse(products);
     }
-
     return [];
   }
 

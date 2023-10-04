@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { ProductsManager } from '../dao/index.js'
-
+import { ProductsManager } from "../dao/index.js";
 
 const router = Router();
 const productsManager = new ProductsManager();
@@ -8,34 +7,35 @@ const productsManager = new ProductsManager();
 // get all products
 router.get("/", async (req, res) => {
   const { limit } = req.query;
-  const products = await productsManager.getProducts(limit);
-  if (limit) {
-    res
-      .status(201)
-      .send({ result: "success", payload: products.slice(0, limit) });
-  } else {
-    res.status(201).send({ result: "success", payload: products });
-  }
+  const { page } = req.query;
+  const { sort } = req.query;
+  const querykey = req.query.category;
+
+  const products = await productsManager.getProducts(
+    limit,
+    page,
+    sort,
+    querykey
+  );
+  res.status(201).send({ result: "success", payload: products });
 });
 
 // get product by id
 router.get("/:pid", async (req, res) => {
-  const id = parseInt(req.params.pid);
+  const id = req.params.pid;
   const productById = await productsManager.getProductById(id);
-
-  try {
-    return res.status(201).send({ result: "success", payload: productById });
-  } catch (err) {
+  if (!productById) {
     return res
       .status(404)
       .send({ error: `El producto con el id: ${id} no existe` });
   }
+  return res.status(201).send({ result: "success", payload: productById });
 });
 
 // create new product
 router.post("/", async (req, res) => {
   const { title, description, price, code, stock, category } = req.body;
-  const newProductProperties = {
+  const newProduct = {
     title,
     description,
     price,
@@ -43,34 +43,31 @@ router.post("/", async (req, res) => {
     stock,
     category,
   };
-
-  const products = await productsManager.getProducts();
-  const product = products.find((element) => {
-    return element.code === newProductProperties.code;
-  });
-  if (Object.values(newProductProperties).includes(undefined || "")) {
+  if (Object.values(newProduct).includes(undefined || "")) {
     return res
       .status(400)
       .send({ error: "No se han ingresado todos los datos" });
   }
 
-  if (product) {
-    return res
-      .status(400)
-      .send({
-        error: `El code: ${newProductProperties.code} se encuentra repetido`,
-      });
+  const allProducts = await productsManager.getProducts();
+  const productCodeExist = allProducts.docs.find((prod) => {
+    return prod.code === newProduct.code;
+  });
+  if (productCodeExist) {
+    return res.status(400).send({
+      error: `El code: ${newProduct.code} se encuentra repetido`,
+    });
   }
 
-  const result = await productsManager.addProduct(newProductProperties);
+  const result = await productsManager.addProduct(newProduct);
   return res.status(201).send({ result: "success", payload: result });
 });
 
 // update a product
 router.put("/:pid", async (req, res) => {
-  const productId = parseInt(req.params.pid);
+  const productId = req.params.pid;
   const { title, description, price, code, stock, category } = req.body;
-  const productProperties = {
+  const product = {
     title,
     description,
     price,
@@ -78,32 +75,45 @@ router.put("/:pid", async (req, res) => {
     stock,
     category,
   };
-
-  if (Object.values(productProperties).includes(undefined)) {
+  if (!productId) {
+    return res
+      .status(400)
+      .send({ error: `No ha ingresado el ID del producto` });
+  }
+  if (Object.values(product).includes(undefined || "")) {
     return res
       .status(400)
       .send({ error: "No se han ingresado todos los datos" });
   }
-  try {
-    const updateProduct = await productsManager.updateProduct(
-      productId,
-      productProperties
-    );
-    return res.status(201).send({ result: "success", payload: updateProduct });
-  } catch (err) {
-    return res.status(400).send({ error: `el ID: ${productId} no existe` });
+  const allProducts = await productsManager.getProducts();
+  const productCodeExist = allProducts.docs.find((prod) => {
+    return prod.code === product.code;
+  });
+  if (productCodeExist) {
+    return res.status(400).send({
+      error: `El code: ${product.code} se encuentra repetido`,
+    });
   }
+
+  const updateProduct = await productsManager.updateProduct(
+    productId,
+    product
+  );
+  return res.status(201).send({ result: "success", payload: updateProduct })
 });
 
 // delete  a product
 router.delete("/:pid", async (req, res) => {
   const productId = req.params.pid;
   if (!productId) {
-    return res.status(400).send({ error: `el ID: ${productId} no existe` });
+    return res.status(400).send({ error: "No se ha ingresado el ID" });
   }
-  const products = await productsManager.deleteProduct(productId);
 
-  return res.status(201).send({ result: "success", payload: products });
+  const products = await productsManager.deleteProduct(productId);
+  if(typeof products === Array){
+    return res.status(201).send({ result: "success", payload: products });
+  }
+  return res.status(400).send({ error: `El producto con el ID: ${productId} no existe` });
 });
 
 export default router;

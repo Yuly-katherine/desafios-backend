@@ -1,69 +1,84 @@
 import productModel from "../models/schema.products.js";
 
 class ProductManager {
-  async addProduct(newProductProperties) {
-
-    const newProduct = {
-      title: newProductProperties.title,
-      description: newProductProperties.description,
-      price: newProductProperties.price,
-      code: newProductProperties.code,
-      stock: newProductProperties.stock,
-      category: newProductProperties.category,
+  // get all products
+  async getProducts(limitInfo, pageInfo, sort, query) {
+    let sortInfo = sort ? { price: sort } : {};
+    let filterOptions = query ? { category: query } : {};
+    const paginateOptions = {
+      limit: limitInfo ?? 10,
+      page: pageInfo ?? 1,
+      lean: true,
+      sort: sortInfo,
     };
-    await productModel.create(newProduct);
-    const products = await this.getProducts();
-    return products;
-  }
-
-  async getProducts() {
-    const products = await productModel.find().lean();
-    if (products) {
+    try {
+      const products = await productModel.paginate(filterOptions, paginateOptions);
       return products;
+    } catch (error) {
+      return [];
     }
-    return [];
   }
 
+  // get product by id
   async getProductById(productId) {
-    const productById = await productModel.findOne({ _id: productId});
+    const productById = await productModel.findOne({ _id: productId });
 
     if (!productById) {
-      throw new Error(`El producto con el ID: ${productId} no existe`);
+      console.error(`El producto con el ID: ${productId} no existe`);
+      return {};
     } else {
       return productById;
     }
   }
 
-  async updateProduct(productId, productProperties) {
-    const productById = await productModel.findOne({_id:productId});;
+  // create new product
+  async addProduct(product) {
+    const newProduct = {
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      code: product.code,
+      stock: product.stock,
+      category: product.category,
+    };
+    await productModel.create(newProduct);
+    const allProducts = await this.getProducts();
+    return allProducts;
+  }
+
+  // update a product
+  async updateProduct(productId, product) {
+    const productById = await productModel.findOne({ _id: productId });
     if (productById) {
       const updateProduct = {
         id: productId,
-        title: productProperties.title || productById.title,
-        description: productProperties.description || productById.description,
-        price: productProperties.price || productById.price,
-        code: productProperties.code || productById.code,
-        stock: productProperties.stock || productById.stock,
-        category: productProperties.category || productById.category,
+        title: product.title || productById.title,
+        description: product.description || productById.description,
+        price: product.price || productById.price,
+        code: product.code || productById.code,
+        stock: product.stock || productById.stock,
+        category: product.category || productById.category,
       };
       await productModel.findOneAndUpdate({ _id: productId }, updateProduct, {
         new: true,
       });
-      const updateProducts = await this.getProducts();
-      return updateProducts;
+      const updatedProducts = await this.getProducts();
+      return updatedProducts;
     } else {
-        throw new Error(`El producto con el ID: ${productId} no existe`);
+      console.error(`El producto con el ID: ${productId} no existe`);
+      return {};
     }
   }
 
+  // delete  a product
   async deleteProduct(productId) {
-    const productById = await productModel.findOne({_id:productId});
+    const productById = await productModel.findOne({ _id: productId });
     if (productById) {
-      await productModel.deleteOne({_id:productId});
-      const updateProducts = await this.getProducts();
-      return updateProducts;
+      await productModel.deleteOne({ _id: productId });
+      const updatedProducts = await this.getProducts();
+      return updatedProducts;
     } else {
-        throw new Error(`El producto con el ID: ${productId} no existe`);
+      return console.error(`El producto con el ID: ${productId} no existe`);
     }
   }
 }

@@ -36,6 +36,16 @@ const httpServer= app.listen(8080, () => {
 })
 
 
+//Mongoose
+try {
+    await mongoose.connect("mongodb+srv://kathegomv:mipassword12@cluster0.5dd2jbo.mongodb.net/",{
+        dbName : "ecommerce"
+    })
+    console.log("connected to DB")
+}catch(err){
+    console.log(err.mensaje)
+}
+
 // Websocket
 const io = new Server(httpServer);
 const messages = [];
@@ -57,13 +67,3 @@ io.on("connection", (socket)=>{
     })
 
 })
-
-//Mongoose
-try {
-    await mongoose.connect("mongodb+srv://kathegomv:mipassword12@cluster0.5dd2jbo.mongodb.net/",{
-        dbName : "ecommerce"
-    })
-    console.log("connected to DB")
-}catch(err){
-    console.log(err.mensaje)
-}

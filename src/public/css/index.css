@@ -1,39 +1,38 @@
+html {
+  padding: 2rem;
+}
 
-  .products-view__form-label {
-    margin-bottom: 5px;
-  }
-  
+.products-view__form-label {
+  margin-bottom: 5px;
+}
 
-  .products-view__form-input {
-    width: 30%;
-    border-radius: 10px;
-    border: 1px solid rgb(161, 158, 158);
-    height: 35px;
-    outline: none;
-  }
-  
-  .products-view {
-    margin-top: 50px;
-    margin-left: 30px;
-  }
-  
-  .products-view__form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: 10px;
-  }
-  
-  .add-product {
-      margin-left: 10px;
-      margin-bottom: 50px;
-      width: 30%;
-      border-radius: 10px;
-    }
-    
-  
-  .all-products-view{
-    margin-left: 30px;
-    margin-bottom: 50px;
-  }
-  
+.products-view__form-input {
+  width: 30%;
+  border-radius: 10px;
+  border: 1px solid rgb(161, 158, 158);
+  height: 35px;
+  outline: none;
+}
+
+.products-view {
+  margin-top: 50px;
+}
+
+.products-view__form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 10px;
+}
+
+.add-product {
+  margin-left: 10px;
+  margin-bottom: 50px;
+  width: 30%;
+  border-radius: 10px;
+}
+
+.all-products-view {
+  margin-left: 30px;
+  margin-bottom: 50px;
+}
