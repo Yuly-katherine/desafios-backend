@@ -11,13 +11,13 @@ router.post("/signup", async (req, res) => {
       const newUser = await UserModel.create({ email, password });
       req.session.user = newUser.email;
       req.session.rol = "user";
-      if (email === "adminCoder@coder.com") {
+      if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
         req.session.rol = "admin";
       }
       return res.redirect("/login");
     } else {
       res.send(
-        `Usuario ya encuentra registrado <a href="/login">Iniciar sesion </a>`
+        `User is already registered <a href="/login">Login </a>`
       );
     }
   } catch (error) {
@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
     res.send("usuario no identificado");
   } else {
     req.session.user = email;
-    if (email === "adminCoder@coder.com") {
+    if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
       req.session.rol = "admin";
     } else {
       req.session.rol = "user";

@@ -45,8 +45,7 @@ app.use('/', viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/chat", chatRouter);
-app.use("/api", authRouter);
-// app.use("/api/auth", authRouter);
+app.use("/api/auth", authRouter);
 
 
 const httpServer= app.listen(8080, () => {
