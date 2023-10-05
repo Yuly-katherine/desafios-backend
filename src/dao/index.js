@@ -3,11 +3,12 @@ import FileCartManager from "./file-managers/cart.managers.js";
 import DbProductsManager from "./db-managers/products.managers.js";
 import DbCartManager from "./db-managers/cart.managers.js";
 import DbChatManager from "./db-managers/chat.managers.js";
+import DbUserManager from "./db-managers/user.managers.js";
 
 const config = {
    presistenceType :"db",
 };
-let ProductsManager, CartManager, ChatManager;
+let ProductsManager, CartManager, ChatManager, UserManager;
 
 
 
@@ -15,10 +16,13 @@ if(config.presistenceType === "db"){
     ProductsManager = DbProductsManager;
     CartManager = DbCartManager;
     ChatManager = DbChatManager;
+    UserManager = DbUserManager;
 }else if(config.presistenceType === "file"){
     ProductsManager = FileProductsManager;
     CartManager = FileCartManager;
+    /*---new implentations---*/
     ChatManager = DbChatManager;
+    UserManager = DbUserManager;
 }else{
     console.log("Unknown persistence type")
 }

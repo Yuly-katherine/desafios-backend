@@ -9,6 +9,21 @@ const productsManager = new ProductsManager();
 const cartManager = new CartManager();
 const chatManager = new ChatManager();
 
+//Handlebars views
+
+viewsRouter.get("/", async (req, res) => {
+  res.render("home")
+})
+
+
+viewsRouter.get("/login",(req,res) =>{
+  res.render("login");
+})
+
+viewsRouter.get("/signup",(req,res) =>{
+  res.render("signup");
+})
+
 
 viewsRouter.get("/products", async (req, res) => {
 const { limit } = req.query;

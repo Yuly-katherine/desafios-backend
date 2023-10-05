@@ -2,10 +2,40 @@ html {
   padding: 2rem;
 }
 
+
+a:link {
+  text-decoration: none;
+}
+
+.home-view,
+.signup-view,
+.login-view {
+  text-align: center;
+  margin-top: 50px;
+}
+.registro, .login{
+  margin-top: 20px;
+}
+
+.home-view__title {
+  font-size: 45px;
+}
+
+.signup-view__form,
+.login-view__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup-view__form-label,
+.login-view__form-label,
 .products-view__form-label {
   margin-bottom: 5px;
 }
 
+.signup-view__form-input,
+.login-view__form-input,
 .products-view__form-input {
   width: 30%;
   border-radius: 10px;
@@ -26,13 +56,17 @@ html {
 }
 
 .add-product {
-  margin-left: 10px;
-  margin-bottom: 50px;
-  width: 30%;
-  border-radius: 10px;
-}
+    margin-left: 10px;
+    margin-bottom: 50px;
+    width: 30%;
+    border-radius: 10px;
+  }
+  
 
-.all-products-view {
+.all-products-view, .all-carts-view {
   margin-left: 30px;
   margin-bottom: 50px;
 }
+
+
+
