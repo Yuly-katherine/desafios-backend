@@ -26,7 +26,6 @@ app.use(express.static('public'));
 app.use(session({
     store:MongoStore.create({
         mongoUrl: dataBase,
-        mongoOptions: {useNewUrlParses: true, useUnifiedTopology: true},
     }),
     secret:"claveSecreta",
     resave: true,

@@ -37,7 +37,8 @@ const { limit } = req.query;
     sort,
     querykey
   );
-    res.render("products", {products});
+    const userData = req.session;
+    res.render("products", {products, userData});
 })
 
 viewsRouter.get("/carts/:cid", async (req, res) => {

@@ -1,6 +1,13 @@
 <div>
   <div class="products-view">
     <h1>!Welcome!</h1>
+    <h5>User: {{userData.user}}</h5>
+      <h5>Rol: {{userData.rol}}</h5>
+      <div>
+        <form method="post" action="/api/logout">
+          <button type="submit" class="btn btn-info">logOut</button>
+        </form>
+      </div>
   </div>
   <h3>Products</h3>
   {{newCart}}
