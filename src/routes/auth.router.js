@@ -3,6 +3,7 @@ import { UserModel } from "../dao/models/schema.user.js";
 
 const router = Router();
 
+
 router.post("/signup", async (req, res) => {
   try {
     const { email, password } = req.body;

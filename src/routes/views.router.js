@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ProductsManager} from "../dao/index.js";
 import { CartManager} from "../dao/index.js";
 import { ChatManager} from "../dao/index.js";
-
+import {auth} from "../middlewares/auth.middleware.js"
 
 const viewsRouter = Router()
 const productsManager = new ProductsManager();
@@ -25,7 +25,7 @@ viewsRouter.get("/signup",(req,res) =>{
 })
 
 
-viewsRouter.get("/products", async (req, res) => {
+viewsRouter.get("/products", auth ,async (req, res) => {
 const { limit } = req.query;
   const { page } = req.query;
   const { sort } = req.query;
