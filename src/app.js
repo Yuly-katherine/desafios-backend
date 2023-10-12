@@ -4,7 +4,9 @@ import handlerbars from 'express-handlebars';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import { Server } from 'socket.io';
+import passport from "passport";
 
+import initializePassport from './config/passport.config.js';
 import viewsRouter from './routes/views.router.js';
 import productsRouter from './routes/products.router.js';
 import cartRouter from './routes/cart.router.js';
@@ -21,6 +23,13 @@ const dataBase = "mongodb+srv://kathegomv:mipassword12@cluster0.5dd2jbo.mongodb.
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 app.use(express.static('public'));
+
+
+// Configuración passport
+initializePassport()
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // Configuración session
 app.use(session({

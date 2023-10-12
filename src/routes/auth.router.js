@@ -1,18 +1,21 @@
 import { Router } from "express";
 import { UserModel } from "../dao/models/schema.user.js";
+import { createHash, isValidPassword } from "../utils.js";
+import passport from "passport";
 
 const router = Router();
 
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", passport.authenticate('signupStrategy') ,async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await UserModel.findOne({ email: email });
     if (!user) {
       const newUser = await UserModel.create({ email, password });
+      newUser.password = createHash(newUser.password)
       req.session.user = newUser.email;
       req.session.rol = "user";
-      if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
+      if (email === "adminCoder@coder.com") {
         req.session.rol = "admin";
       }
       return res.redirect("/login");
@@ -30,13 +33,15 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const authorized = await UserModel.findOne({
     email: email,
-    password: password,
   });
-  if (!authorized) {
-    res.send("usuario no identificado");
+  if (!authorized ) {
+    res.send("User not found");
+  } 
+  if(!isValidPassword(authorized, password)){
+    res.send("Incorrect password");
   } else {
     req.session.user = email;
-    if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
+    if (email === "adminCoder@coder.com") {
       req.session.rol = "admin";
     } else {
       req.session.rol = "user";

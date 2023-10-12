@@ -3,13 +3,50 @@
   <div>
     <form method="post" action="api/auth/signup">
       <div class="signup-view__form">
+        <label class="signup-view__form-label" for="first_name">Nombre:</label>
+        <input
+          class="signup-view__form-input"
+          type="text"
+          name="first_name"
+          id="first_name"
+        />
+      </div>
+      <div class="signup-view__form">
+        <label class="signup-view__form-label" for="last_name">Apellido:</label>
+        <input
+          class="signup-view__form-input"
+          type="text"
+          name="last_name"
+          id="last_name"
+        />
+      </div>
+      <div class="signup-view__form">
+        <label class="signup-view__form-label" for="age">Edad:</label>
+        <input
+          class="signup-view__form-input"
+          type="Number"
+          name="age"
+          id="age"
+        />
+      </div>
+      <div class="signup-view__form">
         <label class="signup-view__form-label" for="email">email:</label>
-        <input class="signup-view__form-input" type="email" name="email" id="email" />
+        <input
+          class="signup-view__form-input"
+          type="email"
+          name="email"
+          id="email"
+        />
       </div>
       <br />
       <div class="signup-view__form">
         <label class="signup-view__form-label" for="password">password:</label>
-        <input class="signup-view__form-input" type="password" name="password" id="password" />
+        <input
+          class="signup-view__form-input"
+          type="password"
+          name="password"
+          id="password"
+        />
       </div>
       <br />
       <button type="submit" class="btn btn-info">Send</button>
