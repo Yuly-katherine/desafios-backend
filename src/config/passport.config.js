@@ -35,7 +35,40 @@ const initializePassport = () => {
       }
     )
   );
+  passport.use(
+    "loginStrategy",
+    new localStrategy(
+      {
+        usernameField: "email",
+      },
+      async (username, password, done) => {
+        try {
+          const user = await UserModel.findOne({ email: username });
+          if (user) {
+            if (isValidPassword(user, password)) {
+              return done(null, user);
+            }
+            return done(null, false);
+          } else {
+            console.log(`User ${user} not found`);
+            return done(null, false);
+          }
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
+  //Serializar y deserializar a los usuarios
+passport.serializeUser((user, done) => {
+    done(null, user._id)
+  });
+  
+  passport.deserializeUser(async(id, done) => {
+    const user = await UserModel.findById(id);
+    return done(null, user)
+  })
+  
 };
-
 
 export default initializePassport;

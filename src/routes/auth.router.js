@@ -6,49 +6,37 @@ import passport from "passport";
 const router = Router();
 
 
-router.post("/signup", passport.authenticate('signupStrategy') ,async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await UserModel.findOne({ email: email });
-    if (!user) {
-      const newUser = await UserModel.create({ email, password });
-      newUser.password = createHash(newUser.password)
-      req.session.user = newUser.email;
-      req.session.rol = "user";
-      if (email === "adminCoder@coder.com") {
-        req.session.rol = "admin";
-      }
-      return res.redirect("/login");
-    } else {
-      res.send(
-        `User is already registered <a href="/login">Login </a>`
-      );
-    }
-  } catch (error) {
-    console.log(error);
-  }
-});
 
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  const authorized = await UserModel.findOne({
-    email: email,
-  });
-  if (!authorized ) {
-    res.send("User not found");
-  } 
-  if(!isValidPassword(authorized, password)){
-    res.send("Incorrect password");
-  } else {
-    req.session.user = email;
-    if (email === "adminCoder@coder.com") {
-      req.session.rol = "admin";
-    } else {
-      req.session.rol = "user";
+router.post("/signup", passport.authenticate("signupStrategy", {
+  failureRedirect : "/api/failure-signup"
+}), async (req, res) => {
+  res.redirect("/login")
+})
+
+router.get("/failure-signup"),(req, res) => {
+  res.send("Passport register failed")
+}
+
+
+router.get("/failure-login"),(req, res) => {
+  res.send("Invalid credentials")
+}
+
+router.post("/login", passport.authenticate("loginStrategy", {
+  failureRedirect : "/api/failure-login"
+}), async (req, res) => {
+  if(req.user){
+    req.session.user = {
+      first_name : user.first_name,
+      last_name : user.last_name,
+      email : user.email,
+      age: user.age
     }
-    return res.redirect("/products");
+    res.redirect("products")
+  } else {
+    return res.status(401).send("Invalid credentials")
   }
-});
+})
 
 //logOut
 router.post("/logout", (req, res) => {

@@ -25,12 +25,6 @@ app.use(urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 
-// Configuración passport
-initializePassport()
-app.use(passport.initialize());
-app.use(passport.session());
-
-
 // Configuración session
 app.use(session({
     store:MongoStore.create({
@@ -40,6 +34,11 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
 }))
+
+// Configuración passport
+initializePassport()
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // Configuración Handlebars
