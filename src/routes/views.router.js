@@ -16,11 +16,11 @@ viewsRouter.get("/", async (req, res) => {
 })
 
 
-viewsRouter.get("/login",(req,res) =>{
+viewsRouter.get("/auth/login",(req,res) =>{
   res.render("login");
 })
 
-viewsRouter.get("/signup",(req,res) =>{
+viewsRouter.get("/auth/signup",(req,res) =>{
   res.render("signup");
 })
 
@@ -37,7 +37,7 @@ const { limit } = req.query;
     sort,
     querykey
   );
-    const userData = req.session;
+    const userData = req.session.user;
     res.render("products", {products, userData});
 })
 

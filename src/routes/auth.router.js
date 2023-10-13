@@ -5,46 +5,70 @@ import passport from "passport";
 
 const router = Router();
 
-
-
-router.post("/signup", passport.authenticate("signupStrategy", {
-  failureRedirect : "/api/failure-signup"
-}), async (req, res) => {
-  res.redirect("/login")
-})
-
-router.get("/failure-signup"),(req, res) => {
-  res.send("Passport register failed")
-}
-
-
-router.get("/failure-login"),(req, res) => {
-  res.send("Invalid credentials")
-}
-
-router.post("/login", passport.authenticate("loginStrategy", {
-  failureRedirect : "/api/failure-login"
-}), async (req, res) => {
-  if(req.user){
-    req.session.user = {
-      first_name : user.first_name,
-      last_name : user.last_name,
-      email : user.email,
-      age: user.age
-    }
-    res.redirect("products")
-  } else {
-    return res.status(401).send("Invalid credentials")
+router.post(
+  "/signup",
+  passport.authenticate("signupStrategy", {
+    failureRedirect: "/auth/failure-signup",
+  }),
+  async (req, res) => {
+    res.redirect("/auth/login");
   }
-})
+);
+
+router.get("/failure-signup"),
+  (req, res) => {
+    res.send("Passport register failed");
+  };
+
+router.get("/failure-login"),
+  (req, res) => {
+    res.send("Invalid credentials");
+  };
+
+router.post(
+  "/login",
+  passport.authenticate("loginStrategy", {
+    failureRedirect: "/auth/failure-login",
+  }),
+  async (req, res) => {
+    if (req.user) {
+      req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        email: req.user.email,
+        age: req.user.age,
+      };
+      res.redirect("/products");
+    } else {
+      return res.status(401).send("Invalid credentials");
+    }
+  }
+);
+
+router.get(
+  "/github",
+  passport.authenticate("githugSignup", { scope: ["user:email"] }),
+  (req, res) => {}
+);
+
+router.get(
+  "/github-callback",
+  passport.authenticate("githugSignup", {
+    failureRedirect: "/auth/failure-signup",
+  }),
+  (req, res) => {
+    req.session.user = req.user
+    res.redirect("/products");
+  }
+);
 
 //logOut
 router.post("/logout", (req, res) => {
   req.session.destroy((error) => {
     if (error) {
-      return res.send("no se pudo cerrar la sesion");
+      return res.send("could not close the session");
     } else {
-      return res.redirect("/");
+      res.send(`Finished session, <a href="/">back</a>`);
     }
   });
 });
