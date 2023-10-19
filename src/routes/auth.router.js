@@ -11,18 +11,13 @@ router.post(
     failureRedirect: "/auth/failure-signup",
   }),
   async (req, res) => {
-    res.redirect("/auth/login");
+    res.redirect("/login");
   }
 );
 
 router.get("/failure-signup"),
   (req, res) => {
     res.send("Passport register failed");
-  };
-
-router.get("/failure-login"),
-  (req, res) => {
-    res.send("Invalid credentials");
   };
 
 router.post(
@@ -45,6 +40,13 @@ router.post(
   }
 );
 
+router.get("/failure-login"),
+  (req, res) => {
+    res.send("Invalid credentials");
+  };
+
+
+
 router.get(
   "/github",
   passport.authenticate("githugSignup", { scope: ["user:email"] }),
@@ -63,12 +65,16 @@ router.get(
 );
 
 //logOut
-router.post("/logout", (req, res) => {
+router.post("/logout",async(req, res) => {
+  if (req.user.email == "adminCoder@coder.com") {
+    console.log(req.user.email, "entreeeeeeeeeeeeeeeeee")
+    await UserModel.deleteOne({ email: "adminCoder@coder.com" })
+  }
   req.session.destroy((error) => {
     if (error) {
       return res.send("could not close the session");
     } else {
-      res.send(`Finished session, <a href="/">back</a>`);
+      res.redirect("/login");
     }
   });
 });

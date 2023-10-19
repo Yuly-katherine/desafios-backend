@@ -16,12 +16,20 @@ viewsRouter.get("/", async (req, res) => {
 })
 
 
-viewsRouter.get("/auth/login",(req,res) =>{
+viewsRouter.get("/login",(req,res) =>{
   res.render("login");
 })
 
-viewsRouter.get("/auth/signup",(req,res) =>{
+viewsRouter.get("/signup",(req,res) =>{
   res.render("signup");
+})
+
+viewsRouter.get("/auth/failure-signup",(req,res) =>{
+  res.render("failure-signup");
+})
+
+viewsRouter.get("/auth/failure-login",(req,res) =>{
+  res.render("failure-login");
 })
 
 

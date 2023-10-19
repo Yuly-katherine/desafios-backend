@@ -61,22 +61,21 @@ const initializePassport = () => {
     )
   );
   passport.use('githugSignup', new GitHubStrategy({
-    // clientID: "Iv1.Iv1.211fa61d654c7aa4",
-    // clientSecret:"0a592fa7f9d6bf8a781b51d3c21b69fc8996bf29",
-    // callbackURL: "http://localhost:8080/auth/github-callback"
     clientID: "Iv1.56094c3584c51e5e",
     clientSecret:"4c1e44511ee5dc676b8ec7218826039b5e9ecdda",
-    callbackURL: "http://localhost:8080/auth/github-callback"
+    callbackURL: "http://localhost:8080/auth/github-callback",
   }, async (accessToken, refreshToken, profile, done) => {
     try{
-      console.log(profile, "profile")
+      // console.log(profile, "profile")
       const userExist = await UserModel.findOne({email:profile.username})
       if(userExist){
         return done(null, userExist);
       }else {
         const newUser = {
+          first_name:profile._json.name,
+          last_name: '',
           email:profile.username,
-          password:createHash(profile.id)
+          password:''
         }
         const userCreated = await UserModel.create(newUser);
         return done(null, userCreated);
@@ -87,15 +86,14 @@ const initializePassport = () => {
   }
   ))
 
-  //Serializar y deserializar a los usuarios
-passport.serializeUser((user, done) => {
+  passport.serializeUser((user, done) => {
     done(null, user._id)
   });
   
   passport.deserializeUser(async(id, done) => {
     const user = await UserModel.findById(id);
     return done(null, user)
-  })
+  })  
   
 };
 
