@@ -67,14 +67,14 @@ const initializePassport = () => {
   }, async (accessToken, refreshToken, profile, done) => {
     try{
       // console.log(profile, "profile")
-      const userExist = await UserModel.findOne({email:profile.username})
+      const userExist = await UserModel.findOne({email:profile._json.email || profile.username})
       if(userExist){
         return done(null, userExist);
       }else {
         const newUser = {
           first_name:profile._json.name,
           last_name: '',
-          email:profile.username,
+          email:profile._json.email || profile.username,
           password:''
         }
         const userCreated = await UserModel.create(newUser);
@@ -93,8 +93,7 @@ const initializePassport = () => {
   passport.deserializeUser(async(id, done) => {
     const user = await UserModel.findById(id);
     return done(null, user)
-  })  
-  
+  })    
 };
 
 export default initializePassport;

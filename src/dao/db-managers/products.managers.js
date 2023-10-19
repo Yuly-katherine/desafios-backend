@@ -51,14 +51,10 @@ class ProductManager {
     const productById = await productModel.findOne({ _id: productId });
     if (productById) {
       const updateProduct = {
-        id: productId,
-        title: product.title || productById.title,
-        description: product.description || productById.description,
-        price: product.price || productById.price,
-        code: product.code || productById.code,
-        stock: product.stock || productById.stock,
-        category: product.category || productById.category,
+        ...productById.toObject(),  
+        ...product,      
       };
+
       await productModel.findOneAndUpdate({ _id: productId }, updateProduct, {
         new: true,
       });

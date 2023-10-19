@@ -6,9 +6,7 @@ const productsManager = new ProductsManager();
 
 // get all products
 router.get("/", async (req, res) => {
-  const { limit } = req.query;
-  const { page } = req.query;
-  const { sort } = req.query;
+  const { limit, page, sort } = req.query;
   const querykey = req.query.category;
 
   const products = await productsManager.getProducts(

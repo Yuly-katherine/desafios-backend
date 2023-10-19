@@ -67,7 +67,6 @@ router.get(
 //logOut
 router.post("/logout",async(req, res) => {
   if (req.user.email == "adminCoder@coder.com") {
-    console.log(req.user.email, "entreeeeeeeeeeeeeeeeee")
     await UserModel.deleteOne({ email: "adminCoder@coder.com" })
   }
   req.session.destroy((error) => {
